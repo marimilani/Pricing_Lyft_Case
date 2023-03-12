@@ -52,7 +52,8 @@ def run(monthly_riders, rider_churn, lyft_take)
 
   gross_profit = $yearly_income - $invested_budget
 
-  puts "Yearly income: #{$yearly_income} | Invested budget: #{$invested_budget} | Rider churn count: #{$rider_churn_count} | Gross profit: #{gross_profit}"
+  return {yearly_income: $yearly_income, invested_budget: $invested_budget, gross_profit: gross_profit, rider_churn_count: $rider_churn_count}
+  # puts "Yearly income: #{$yearly_income} | Invested budget: #{$invested_budget} | Gross profit: #{gross_profit} | Rider churn count: #{$rider_churn_count}"
 end
 
 lyft_take = 6
@@ -66,4 +67,29 @@ monthly_drivers = 100
 rider_churn = false
 match = false
 # Initialized this variable at 'false', and will add later on the methods the chances of it becoming 'true' based on the match rate at each price.
-run(monthly_riders, rider_churn, lyft_take)
+
+results = []
+
+100.times do
+  results_hash = run(monthly_riders, rider_churn, lyft_take)
+  results.append(results_hash)
+end
+
+sum_gross_profit = 0
+sum_invested_budget = 0
+sum_yearly_income = 0
+sum_rider_churn_count = 0
+
+results.each do | result |
+  sum_yearly_income += result[:yearly_income]
+  sum_invested_budget += result[:invested_budget]
+  sum_gross_profit += result[:gross_profit]
+  sum_rider_churn_count += result[:rider_churn_count]
+end
+
+average_gross_profit = sum_gross_profit / results.size
+average_yearly_income = sum_yearly_income / results.size
+average_invested_budget = sum_invested_budget / results.size
+average_rider_churn_count = sum_rider_churn_count / results.size
+
+puts "Estimated yearly income: #{average_yearly_income.round} | Estimated invested budget: #{average_invested_budget.round} | Estimated gross profit: #{average_gross_profit.round} | Estimated rider churn count: #{average_rider_churn_count.round}"
